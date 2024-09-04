@@ -1,7 +1,7 @@
 const NoChanceLeft = () => {
     return (
         <>
-            No Chnage Left / Lost
+            No Chance Left / Lost
         </>
     )
 }

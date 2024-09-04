@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import wordList from '../data/words-list.txt';
-import wordJsonList from '../data/5-letter-words.json';
+// import wordJsonList from '../data/5-letter-words.json';
 
 const initialWordsSet = new Set<string>();
 const useGetWordsList = () => {
