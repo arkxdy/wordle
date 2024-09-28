@@ -1,6 +1,6 @@
 const useGetStyle = (word: string, wordSet: Set<string>, val: string, index: number): {} | null => {
-    if(wordSet?.has(val)){
-        if(word[index] == val) {
+    if(wordSet?.has(val.toLowerCase())){
+        if(word[index] == val.toLowerCase()) {
             return {backgroundColor: 'green'}
         }else{
             return {backgroundColor: '#c65102'}

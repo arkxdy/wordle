@@ -181,7 +181,6 @@ export default Wordle;
 
 
 const IncorrectWordPopup = (props:{handleClose: (val:boolean) => void}) => {
-
     const close = () => {
         props.handleClose(false)
     }

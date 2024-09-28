@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useGetStyle from "../hooks/useGetStyle";
 
 const InputMatrix = (props: {word: string, wordSet: Set<string>, enable: boolean, handleInput: (val: string) => void}) => {
@@ -14,6 +14,14 @@ const InputMatrix = (props: {word: string, wordSet: Set<string>, enable: boolean
     const [style4, setStyle4] = useState({})
     const [style5, setStyle5] = useState({})
 
+    const [inputIndex, setInputIndex] = useState<number>(1)
+    console.log(inputIndex)
+    const inputRefOne = useRef<HTMLInputElement>(null)
+    //inputRefOne.current?.focus()
+    const inputRefTwo = useRef<HTMLInputElement>(null)
+    const inputRefThree = useRef<HTMLInputElement>(null)
+    const inputRefFour = useRef<HTMLInputElement>(null)
+    const inputRefFive = useRef<HTMLInputElement>(null)
     useEffect(() => {
     if(!props.enable){
         const getStyle1 = useGetStyle(props.word, props.wordSet, input1, 0);
@@ -33,7 +41,33 @@ const InputMatrix = (props: {word: string, wordSet: Set<string>, enable: boolean
 
 
     useEffect(() => {
-        const input: string = (input1 + input2 + input3 + input4 + input5)
+        switch(inputIndex) {
+            case 1: {
+                inputRefOne.current?.focus()
+                break;
+            }
+            case 2: {
+                inputRefTwo.current?.focus()
+                break;
+            }
+            case 3: {
+                inputRefThree.current?.focus()
+                break;
+            }
+            case 4: {
+                inputRefFour.current?.focus()
+                break;
+            }
+            case 5: {
+                inputRefFive.current?.focus()
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        //if(input1.length === 1 && inputRefTwo.current !== null) inputRefTwo.current.focus()
+        const input: string = (input1 + input2 + input3 + input4 + input5).toLowerCase()
         props.handleInput(input)
           
     },[input1, input2, input3, input4, input5])
@@ -41,25 +75,27 @@ const InputMatrix = (props: {word: string, wordSet: Set<string>, enable: boolean
 
     return (
         <div>
-        <InputArray style={style1} disable={!props.enable} handleChange={setInput1}></InputArray>
-        <InputArray style={style2} disable={!props.enable} handleChange={setInput2}></InputArray>
-        <InputArray style={style3} disable={!props.enable} handleChange={setInput3}></InputArray>
-        <InputArray style={style4} disable={!props.enable} handleChange={setInput4}></InputArray>
-        <InputArray style={style5} disable={!props.enable} handleChange={setInput5}></InputArray>
+        <InputBox style={style1} disable={!props.enable} handleChange={setInput1} value={input1} inputRef={inputRefOne} updateInputIndex={setInputIndex}/>
+        <InputBox style={style2} disable={!props.enable} handleChange={setInput2} value={input2} inputRef={inputRefTwo} updateInputIndex={setInputIndex}/>
+        <InputBox style={style3} disable={!props.enable} handleChange={setInput3} value={input3} inputRef={inputRefThree} updateInputIndex={setInputIndex}/>
+        <InputBox style={style4} disable={!props.enable} handleChange={setInput4} value={input4} inputRef={inputRefFour} updateInputIndex={setInputIndex}/>
+        <InputBox style={style5} disable={!props.enable} handleChange={setInput5} value={input5} inputRef={inputRefFive} updateInputIndex={setInputIndex}/>
         </div>
     )
 }
 export default InputMatrix;
 
 
-const InputArray = (props:{style: any, disable: boolean, handleChange: (val: string) => void }) => {
+const InputBox = (props:{style: any, disable: boolean, handleChange: (val: string) => void, value: string, inputRef: React.RefObject<HTMLInputElement>, updateInputIndex: React.Dispatch<React.SetStateAction<number>> }) => {
     const updateValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //setValue(e.target.value)
-        props.handleChange(e.target.value)
+        if(e.target.value.length == 0 || ((e.target.value.charCodeAt(0) >= 65 && e.target.value.charCodeAt(0) <= 90) || (e.target.value.charCodeAt(0) >= 97 && e.target.value.charCodeAt(0) <= 122))){
+            props.handleChange(e.target.value.toUpperCase())
+            props.updateInputIndex((prev) => prev+1)
+        }
     }
     return (
         <>
-            <input disabled={props.disable} style={props.style} type="text" maxLength={1} onChange={(e) => updateValue(e)}></input>
+            <input className="text-box" disabled={props.disable} style={props.style} type="text" maxLength={1} onChange={(e) => updateValue(e)} value={props.value} ref={props.inputRef}></input>
         </>
     )
 }
